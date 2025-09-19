@@ -2,6 +2,9 @@
 
 This plugin enables using Infinispan as a persistence backend for QuickFIX/J sessions and messages, providing a distributed, scalable, and high-performance solution.
 
+[![codecov](https://codecov.io/github/darioajr/infinispan-quickfixj-plugin/branch/main/graph/badge.svg?style=flat-square)](https://app.codecov.io/github/darioajr/infinispan-quickfixj-plugin) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdarioajr%2Finfinispan-quickfixj-plugin.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdarioajr%2Finfinispan-quickfixj-plugin?ref=badge_shield) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=darioajr_infinispan-quickfixj-plugin&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=darioajr_infinispan-quickfixj-plugin) [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.darioajr.converter/fixtoavro)](https://central.sonatype.com/artifact/io.github.darioajr.converter/fixtoavro)
+
+
 ## Features
 
 - **Distributed Persistence**: Stores messages and session data in distributed Infinispan cache
