@@ -71,7 +71,7 @@ out/
 .vscode/
 
 # QuickFIX/J files
-/store/
+store/
 logs/
 *.session
 *.seqnums
