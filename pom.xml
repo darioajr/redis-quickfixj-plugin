@@ -50,13 +50,14 @@
     </scm>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <infinispan.version>14.0.21.Final</infinispan.version>
-        <slf4j.version>1.7.36</slf4j.version>
-        <junit.version>5.9.2</junit.version>
-        <mockito.version>5.1.1</mockito.version>
+        <infinispan.version>15.1.6.Final</infinispan.version>
+        <slf4j.version>2.0.16</slf4j.version>
+        <junit.version>5.11.3</junit.version>
+        <mockito.version>5.14.2</mockito.version>
         <maven.version>3.9.9</maven.version>
         <maven.central.version>0.7.0</maven.central.version>
         <maven.surefire.plugin.version>3.5.2</maven.surefire.plugin.version>
@@ -77,6 +78,18 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-bom</artifactId>
+                <version>${infinispan.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <!-- QuickFIX/J Core -->
         <dependency>
@@ -94,12 +107,14 @@
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-core</artifactId>
-            <version>${infinispan.version}</version>
         </dependency>
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-client-hotrod</artifactId>
-            <version>${infinispan.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-commons</artifactId>
         </dependency>
 
         <!-- Logging -->
@@ -131,7 +146,6 @@
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-server-testdriver-junit5</artifactId>
-            <version>${infinispan.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -243,10 +257,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
+                <version>3.13.0</version>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
+                    <release>${maven.compiler.release}</release>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                        <arg>-Xlint:-preview</arg>
+                    </compilerArgs>
+                    <showWarnings>false</showWarnings>
                 </configuration>
             </plugin>
 

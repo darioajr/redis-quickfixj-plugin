@@ -205,9 +205,8 @@ public class InfinispanQuickFixJConfig {
         
         if (enablePersistence) {
             builder.persistence()
-                .addSoftIndexFileStore()
-                .dataLocation(persistenceLocation + "/data")
-                .indexLocation(persistenceLocation + "/index")
+                .addSingleFileStore()
+                .location(persistenceLocation)
                 .async().enable();
         }
         

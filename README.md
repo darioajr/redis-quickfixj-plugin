@@ -16,9 +16,9 @@ This plugin enables using Infinispan as a persistence backend for QuickFIX/J ses
 
 ## Requirements
 
-- Java 8 or higher
+- Java 21 or higher
 - QuickFIX/J 2.3.0+
-- Infinispan 14.0+
+- Infinispan 15.1+
 
 ## Installation
 
