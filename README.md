@@ -1,23 +1,23 @@
-# Plugin Infinispan para QuickFIX/J
+# Infinispan Plugin for QuickFIX/J
 
-Este plugin permite usar o Infinispan como backend de persistência para sessões e mensagens do QuickFIX/J, fornecendo uma solução distribuída, escalável e de alto desempenho.
+This plugin enables using Infinispan as a persistence backend for QuickFIX/J sessions and messages, providing a distributed, scalable, and high-performance solution.
 
-## Características
+## Features
 
-- **Persistência Distribuída**: Armazena mensagens e dados de sessão em cache distribuído Infinispan
-- **Alta Disponibilidade**: Suporte a clustering e replicação de dados
-- **Configuração Flexível**: Múltiplos modos de cache (LOCAL, REPLICATED, DISTRIBUTED)
-- **Integração Transparente**: Drop-in replacement para stores padrão do QuickFIX/J
-- **Estatísticas e Monitoramento**: Métricas detalhadas de performance
-- **Persistência em Disco**: Opcional para durabilidade além da memória
+- **Distributed Persistence**: Stores messages and session data in distributed Infinispan cache
+- **High Availability**: Clustering and data replication support
+- **Flexible Configuration**: Multiple cache modes (LOCAL, REPLICATED, DISTRIBUTED)
+- **Transparent Integration**: Drop-in replacement for standard QuickFIX/J stores
+- **Statistics and Monitoring**: Detailed performance metrics
+- **Disk Persistence**: Optional for durability beyond memory
 
-## Requisitos
+## Requirements
 
-- Java 8 ou superior
+- Java 8 or higher
 - QuickFIX/J 2.3.0+
 - Infinispan 14.0+
 
-## Instalação
+## Installation
 
 ### Maven
 
@@ -35,33 +35,33 @@ Este plugin permite usar o Infinispan como backend de persistência para sessõe
 implementation 'com.infinispan.quickfixj:infinispan-quickfixj-plugin:1.0.0'
 ```
 
-## Configuração Rápida
+## Quick Configuration
 
-### 1. Configuração Básica (Local)
+### 1. Basic Configuration (Local)
 
 ```java
 import com.infinispan.quickfixj.config.InfinispanQuickFixJConfig;
 import com.infinispan.quickfixj.factory.InfinispanMessageStoreFactory;
 
-// Criar configuração
+// Create configuration
 InfinispanQuickFixJConfig config = new InfinispanQuickFixJConfig()
-    .clusterName("meu-cluster")
+    .clusterName("my-cluster")
     .cacheMode(CacheMode.LOCAL)
-    .expiration(1440) // 24 horas
+    .expiration(1440) // 24 hours
     .maxEntries(10000);
 
-// Criar factory
+// Create factory
 InfinispanMessageStoreFactory factory = config.createMessageStoreFactory();
 ```
 
-### 2. Configuração via Properties
+### 2. Configuration via Properties
 
 ```properties
 # quickfixj.cfg
 [DEFAULT]
 ConnectionType=initiator
 MessageStoreFactory=com.infinispan.quickfixj.factory.InfinispanMessageStoreFactory
-InfinispanClusterName=meu-cluster
+InfinispanClusterName=my-cluster
 InfinispanCacheMode=LOCAL
 InfinispanExpirationMinutes=1440
 InfinispanMaxEntries=10000
@@ -74,38 +74,38 @@ SocketConnectHost=localhost
 SocketConnectPort=9876
 ```
 
-### 3. Uso Programático
+### 3. Programmatic Usage
 
 ```java
-// Criar SessionSettings
+// Create SessionSettings
 SessionSettings settings = new SessionSettings("quickfixj.cfg");
 
-// Criar factory e configurar
+// Create factory and configure
 InfinispanMessageStoreFactory factory = new InfinispanMessageStoreFactory();
 factory.configure(settings);
 
-// Usar com SocketInitiator ou SocketAcceptor
+// Use with SocketInitiator or SocketAcceptor
 SocketInitiator initiator = new SocketInitiator(application, factory, settings);
 ```
 
-## Configurações Avançadas
+## Advanced Configurations
 
-### Clustering e Distribuição
+### Clustering and Distribution
 
 ```java
 InfinispanQuickFixJConfig config = new InfinispanQuickFixJConfig()
     .clusterName("quickfixj-production")
-    .cacheMode(CacheMode.DIST_SYNC) // Distribuído síncrono
-    .expiration(2880) // 48 horas
+    .cacheMode(CacheMode.DIST_SYNC) // Synchronous distributed
+    .expiration(2880) // 48 hours
     .maxEntries(100000)
     .enableStatistics(true)
-    .enablePersistence("/data/infinispan"); // Persistência em disco
+    .enablePersistence("/data/infinispan"); // Disk persistence
 ```
 
-### Configuração de Cache Customizada
+### Custom Cache Configuration
 
 ```java
-// Para configurações mais avançadas, use arquivo XML
+// For more advanced configurations, use XML file
 InfinispanMessageStoreFactory factory = new InfinispanMessageStoreFactory();
 
 Properties props = new Properties();
@@ -117,41 +117,41 @@ settings.set("InfinispanConfigFile", "infinispan-custom.xml");
 factory.configure(settings);
 ```
 
-## Propriedades de Configuração
+## Configuration Properties
 
-| Propriedade | Descrição | Padrão | Valores |
-|-------------|-----------|---------|---------|
-| `InfinispanClusterName` | Nome do cluster | `quickfixj-cluster` | String |
-| `InfinispanCacheMode` | Modo do cache | `LOCAL` | `LOCAL`, `REPLICATED`, `DIST_SYNC`, `DIST_ASYNC` |
-| `InfinispanExpirationMinutes` | Tempo de expiração (minutos) | `1440` | Número |
-| `InfinispanMaxEntries` | Máximo de entradas | `10000` | Número |
-| `InfinispanConfigFile` | Arquivo de configuração XML | - | Caminho do arquivo |
+| Property | Description | Default | Values |
+|----------|-------------|---------|---------|
+| `InfinispanClusterName` | Cluster name | `quickfixj-cluster` | String |
+| `InfinispanCacheMode` | Cache mode | `LOCAL` | `LOCAL`, `REPLICATED`, `DIST_SYNC`, `DIST_ASYNC` |
+| `InfinispanExpirationMinutes` | Expiration time (minutes) | `1440` | Number |
+| `InfinispanMaxEntries` | Maximum entries | `10000` | Number |
+| `InfinispanConfigFile` | XML configuration file | - | File path |
 
-## Modos de Cache
+## Cache Modes
 
 ### LOCAL
-- Cache apenas na instância local
-- Ideal para desenvolvimento e testes
-- Sem overhead de rede
+- Cache only on local instance
+- Ideal for development and testing
+- No network overhead
 
 ### REPLICATED
-- Dados replicados em todos os nós
-- Leitura rápida, escrita mais lenta
-- Ideal para clusters pequenos
+- Data replicated on all nodes
+- Fast reads, slower writes
+- Ideal for small clusters
 
 ### DISTRIBUTED
-- Dados distribuídos entre nós
-- Balanceamento de carga
-- Ideal para clusters grandes
+- Data distributed across nodes
+- Load balancing
+- Ideal for large clusters
 
-## Exemplos Práticos
+## Practical Examples
 
-### Exemplo 1: Iniciador Simples
+### Example 1: Simple Initiator
 
 ```java
 public class SimpleInitiator {
     public static void main(String[] args) throws Exception {
-        // Configuração
+        // Configuration
         InfinispanQuickFixJConfig config = new InfinispanQuickFixJConfig()
             .clusterName("simple-cluster")
             .cacheMode(CacheMode.LOCAL);
@@ -170,7 +170,7 @@ public class SimpleInitiator {
         SocketInitiator initiator = new SocketInitiator(application, factory, settings);
         initiator.start();
         
-        // Aguardar...
+        // Wait...
         Thread.sleep(10000);
         
         initiator.stop();
@@ -179,16 +179,16 @@ public class SimpleInitiator {
 }
 ```
 
-### Exemplo 2: Aceitador Distribuído
+### Example 2: Distributed Acceptor
 
 ```java
 public class DistributedAcceptor {
     public static void main(String[] args) throws Exception {
-        // Configuração distribuída
+        // Distributed configuration
         InfinispanQuickFixJConfig config = new InfinispanQuickFixJConfig()
             .clusterName("production-cluster")
             .cacheMode(CacheMode.DIST_SYNC)
-            .expiration(2880) // 48 horas
+            .expiration(2880) // 48 hours
             .maxEntries(1000000)
             .enableStatistics(true)
             .enablePersistence("/opt/quickfixj/data");
@@ -203,7 +203,7 @@ public class DistributedAcceptor {
         
         acceptor.start();
         
-        // Servidor rodando...
+        // Server running...
         System.in.read();
         
         acceptor.stop();
@@ -212,31 +212,31 @@ public class DistributedAcceptor {
 }
 ```
 
-### Exemplo 3: Monitoramento
+### Example 3: Monitoring
 
 ```java
-// Obter estatísticas
+// Get statistics
 Properties stats = factory.getCacheStatistics();
-System.out.println("Mensagens armazenadas: " + stats.getProperty("messages.size"));
-System.out.println("Sessões ativas: " + stats.getProperty("sessions.size"));
-System.out.println("Membros do cluster: " + stats.getProperty("cluster.members"));
+System.out.println("Stored messages: " + stats.getProperty("messages.size"));
+System.out.println("Active sessions: " + stats.getProperty("sessions.size"));
+System.out.println("Cluster members: " + stats.getProperty("cluster.members"));
 ```
 
-## Performance e Tuning
+## Performance and Tuning
 
-### Configurações de Performance
+### Performance Settings
 
 ```java
 InfinispanQuickFixJConfig config = new InfinispanQuickFixJConfig()
-    .maxEntries(1000000) // Aumentar para alta carga
-    .expiration(0) // Sem expiração para máxima performance
-    .enableStatistics(false); // Desabilitar em produção se não necessário
+    .maxEntries(1000000) // Increase for high load
+    .expiration(0) // No expiration for maximum performance
+    .enableStatistics(false); // Disable in production if not needed
 ```
 
-### Heap e GC
+### Heap and GC
 
 ```bash
-# JVM flags recomendadas
+# Recommended JVM flags
 -Xms2g -Xmx8g
 -XX:+UseG1GC
 -XX:MaxGCPauseMillis=200
@@ -244,7 +244,7 @@ InfinispanQuickFixJConfig config = new InfinispanQuickFixJConfig()
 -XX:+UseStringDeduplication
 ```
 
-## Monitoramento e Troubleshooting
+## Monitoring and Troubleshooting
 
 ### Logs
 
@@ -256,7 +256,7 @@ InfinispanQuickFixJConfig config = new InfinispanQuickFixJConfig()
 
 ### JMX
 
-O Infinispan expõe métricas via JMX. Para habilitar:
+Infinispan exposes metrics via JMX. To enable:
 
 ```java
 GlobalConfiguration globalConfig = new GlobalConfigurationBuilder()
@@ -264,58 +264,58 @@ GlobalConfiguration globalConfig = new GlobalConfigurationBuilder()
     .build();
 ```
 
-### Verificação de Conectividade
+### Connectivity Check
 
 ```java
-// Verificar status do cluster
+// Check cluster status
 EmbeddedCacheManager cacheManager = factory.getCacheManager();
-System.out.println("Membros: " + cacheManager.getMembers());
+System.out.println("Members: " + cacheManager.getMembers());
 System.out.println("Status: " + cacheManager.getStatus());
 ```
 
-## Migração
+## Migration
 
-### De FileMessageStore
+### From FileMessageStore
 
-1. Backup dos arquivos existentes
-2. Alterar configuração para usar `InfinispanMessageStoreFactory`
-3. Reiniciar aplicação
-4. Dados antigos não são migrados automaticamente
+1. Backup existing files
+2. Change configuration to use `InfinispanMessageStoreFactory`
+3. Restart application
+4. Old data is not migrated automatically
 
-### De DatabaseMessageStore
+### From DatabaseMessageStore
 
-Similar ao FileMessageStore, requer reconfiguração manual.
+Similar to FileMessageStore, requires manual reconfiguration.
 
-## Limitações Conhecidas
+## Known Limitations
 
-- Não há migração automática de stores existentes
-- Sequence numbers são mantidos em memória para performance
-- Clustering requer configuração de rede adequada
+- No automatic migration from existing stores
+- Sequence numbers are kept in memory for performance
+- Clustering requires proper network configuration
 
-## Contribuição
+## Contributing
 
-Contribuições são bem-vindas! Por favor:
+Contributions are welcome! Please:
 
-1. Fork o projeto
-2. Crie uma branch para sua feature
-3. Commit suas mudanças
-4. Abra um Pull Request
+1. Fork the project
+2. Create a branch for your feature
+3. Commit your changes
+4. Open a Pull Request
 
-## Licença
+## License
 
-Este projeto está licenciado sob a Apache License 2.0. Veja o arquivo LICENSE para detalhes.
+This project is licensed under the Apache License 2.0. See the LICENSE file for details.
 
-## Suporte
+## Support
 
-- **Issues**: [GitHub Issues](https://github.com/seu-repo/issues)
-- **Documentação**: [Wiki](https://github.com/seu-repo/wiki)
-- **Community**: [Discussions](https://github.com/seu-repo/discussions)
+- **Issues**: [GitHub Issues](https://github.com/darioajr/infinispan-quickfixj-plugin/issues)
+- **Documentation**: [Wiki](https://github.com/darioajr/infinispan-quickfixj-plugin/wiki)
+- **Community**: [Discussions](https://github.com/darioajr/infinispan-quickfixj-plugin/discussions)
 
 ## Changelog
 
 ### 1.0.0
-- Primeira versão estável
-- Suporte a MessageStore via Infinispan
-- Configuração via Properties e programática
-- Suporte a clustering
-- Persistência opcional em disco
+- First stable version
+- MessageStore support via Infinispan
+- Configuration via Properties and programmatic
+- Clustering support
+- Optional disk persistence
