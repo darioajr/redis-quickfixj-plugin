@@ -197,6 +197,9 @@ public class InfinispanMessageStoreFactory implements MessageStoreFactory {
             
             logger.debug("MessageStore created for session: {}", sessionID);
             return store;
+        } catch (org.infinispan.commons.IllegalLifecycleStateException e) {
+            logger.error("Cannot create MessageStore for session {} - cache manager is terminated", sessionID);
+            throw new RuntimeException("Failed to create MessageStore - cache manager is terminated", e);
         } catch (Exception e) {
             logger.error("Error creating MessageStore for session: {}", sessionID, e);
             throw new RuntimeException("Failed to create MessageStore", e);
@@ -298,9 +301,34 @@ public class InfinispanMessageStoreFactory implements MessageStoreFactory {
                 stats.setProperty("cluster.members", String.valueOf(members != null ? members.size() : 1));
                 stats.setProperty("cache.status", cacheManager.getStatus().toString());
                 
+            } catch (org.infinispan.commons.IllegalLifecycleStateException e) {
+                // Cache manager is terminated - this is expected in some scenarios
+                logger.debug("Cache manager is terminated, returning default statistics");
+                stats.setProperty("messages.size", "0");
+                stats.setProperty("sequences.size", "0");
+                stats.setProperty("sessions.size", "0");
+                stats.setProperty("settings.size", "0");
+                stats.setProperty("cluster.members", "0");
+                stats.setProperty("cache.status", "TERMINATED");
             } catch (Exception e) {
-                logger.warn("Error obtaining cache statistics", e);
+                // Unexpected errors should be logged as warnings
+                logger.warn("Unexpected error obtaining cache statistics", e);
+                stats.setProperty("messages.size", "0");
+                stats.setProperty("sequences.size", "0");
+                stats.setProperty("sessions.size", "0");
+                stats.setProperty("settings.size", "0");
+                stats.setProperty("cluster.members", "0");
+                stats.setProperty("cache.status", "ERROR");
             }
+        } else {
+            // Cache manager is null, set default values
+            logger.debug("Cache manager is null, returning default statistics");
+            stats.setProperty("messages.size", "0");
+            stats.setProperty("sequences.size", "0");
+            stats.setProperty("sessions.size", "0");
+            stats.setProperty("settings.size", "0");
+            stats.setProperty("cluster.members", "0");
+            stats.setProperty("cache.status", "NOT_INITIALIZED");
         }
         
         return stats;
