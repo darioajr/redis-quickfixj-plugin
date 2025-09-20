@@ -9,7 +9,6 @@ on:
 jobs:
   build:
     name: Build, Test and Analyze
-    needs: verify-commits
     runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
@@ -65,7 +64,7 @@ jobs:
     name: Release and Publish
     needs: build
     runs-on: ubuntu-24.04
-    if: github.ref == 'refs/heads/main' && !startsWith(github.head_ref, 'dependabot/')
+    if: startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: write
     steps:
@@ -111,36 +110,34 @@ jobs:
       - name: Make Maven wrapper executable
         run: chmod +x ./mvnw
 
-      - name: Generate release version
+      - name: Deploy to Maven Central
         run: |
           git config --global user.email "darioajr@gmail.com"
           git config --global user.name "Dario Alves Junior"
           
-          ./mvnw release:prepare -B
-          TAG_NAME=$(git describe --tags --abbrev=0)
-          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
-          VERSION=${TAG_NAME//v/}
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-      
-          ./mvnw release:perform -B
-          git push origin --tags
+          # Extract version from tag
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "Deploying version: $VERSION"
+          
+          # Set version in pom.xml
+          ./mvnw versions:set -DnewVersion=$VERSION -DgenerateBackupPoms=false
+          
+          # Deploy to Maven Central
+          ./mvnw clean deploy -P release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
 
-      - name: Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: Release ${{ env.TAG_NAME }}
-          tag_name: ${{ env.TAG_NAME }}
+          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
           files: |
             target/*.jar
             target/*.pom
             target/*.asc
-            target/*.sha1
-            target/*.sha256
-            target/*.sha512
           draft: false
           prerelease: false
           generate_release_notes: true
@@ -151,6 +148,7 @@ jobs:
   verify-commits:
     name: Verify Commits
     runs-on: ubuntu-24.04
+    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v4
         with:
