@@ -2,7 +2,7 @@
 
 This plugin enables using Infinispan as a persistence backend for QuickFIX/J sessions and messages, providing a distributed, scalable, and high-performance solution.
 
-[![codecov](https://codecov.io/github/darioajr/infinispan-quickfixj-plugin/branch/main/graph/badge.svg?style=flat-square)](https://app.codecov.io/github/darioajr/infinispan-quickfixj-plugin) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdarioajr%2Finfinispan-quickfixj-plugin.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdarioajr%2Finfinispan-quickfixj-plugin?ref=badge_shield) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=darioajr_infinispan-quickfixj-plugin&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=darioajr_infinispan-quickfixj-plugin) [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.darioajr.converter/fixtoavro)](https://central.sonatype.com/artifact/io.github.darioajr.converter/fixtoavro)
+[![codecov](https://codecov.io/github/darioajr/infinispan-quickfixj-plugin/branch/main/graph/badge.svg?style=flat-square)](https://app.codecov.io/github/darioajr/infinispan-quickfixj-plugin) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdarioajr%2Finfinispan-quickfixj-plugin.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdarioajr%2Finfinispan-quickfixj-plugin?ref=badge_shield) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=darioajr_infinispan-quickfixj-plugin&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=darioajr_infinispan-quickfixj-plugin) [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.darioajr/quickfixj-infinispan)](https://central.sonatype.com/artifact/io.github.darioajr/quickfixj-infinispan)
 
 
 ## Features
@@ -26,8 +26,8 @@ This plugin enables using Infinispan as a persistence backend for QuickFIX/J ses
 
 ```xml
 <dependency>
-    <groupId>com.infinispan.quickfixj</groupId>
-    <artifactId>infinispan-quickfixj-plugin</artifactId>
+    <groupId>io.github.darioajr</groupId>
+    <artifactId>quickfixj-infinispan</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```
@@ -35,7 +35,7 @@ This plugin enables using Infinispan as a persistence backend for QuickFIX/J ses
 ### Gradle
 
 ```gradle
-implementation 'com.infinispan.quickfixj:infinispan-quickfixj-plugin:1.0.0'
+implementation 'io.github.darioajr:quickfixj-infinispan:1.0.0'
 ```
 
 ## Quick Configuration
@@ -43,8 +43,8 @@ implementation 'com.infinispan.quickfixj:infinispan-quickfixj-plugin:1.0.0'
 ### 1. Basic Configuration (Local)
 
 ```java
-import com.infinispan.quickfixj.config.InfinispanQuickFixJConfig;
-import com.infinispan.quickfixj.factory.InfinispanMessageStoreFactory;
+import io.github.darioajr.quickfixj.config.InfinispanQuickFixJConfig;
+import io.github.darioajr.quickfixj.factory.InfinispanMessageStoreFactory;
 
 // Create configuration
 InfinispanQuickFixJConfig config = new InfinispanQuickFixJConfig()
@@ -63,7 +63,7 @@ InfinispanMessageStoreFactory factory = config.createMessageStoreFactory();
 # quickfixj.cfg
 [DEFAULT]
 ConnectionType=initiator
-MessageStoreFactory=com.infinispan.quickfixj.factory.InfinispanMessageStoreFactory
+MessageStoreFactory=io.github.darioajr.quickfixj.factory.InfinispanMessageStoreFactory
 InfinispanClusterName=my-cluster
 InfinispanCacheMode=LOCAL
 InfinispanExpirationMinutes=1440
@@ -253,7 +253,7 @@ InfinispanQuickFixJConfig config = new InfinispanQuickFixJConfig()
 
 ```xml
 <!-- logback.xml -->
-<logger name="com.infinispan.quickfixj" level="INFO"/>
+<logger name="io.github.darioajr.quickfixj" level="INFO"/>
 <logger name="org.infinispan" level="WARN"/>
 ```
 
