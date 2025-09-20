@@ -1,4 +1,4 @@
-package com.infinispan.quickfixj.integration;
+package io.github.darioajr.quickfixj.infinispan.integration;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -16,9 +16,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.infinispan.quickfixj.config.InfinispanQuickFixJConfig;
-import com.infinispan.quickfixj.factory.InfinispanMessageStoreFactory;
-
+import io.github.darioajr.quickfixj.infinispan.config.InfinispanQuickFixJConfig;
+import io.github.darioajr.quickfixj.infinispan.factory.InfinispanMessageStoreFactory;
 import quickfix.MessageStore;
 import quickfix.SessionID;
 import quickfix.SessionSettings;

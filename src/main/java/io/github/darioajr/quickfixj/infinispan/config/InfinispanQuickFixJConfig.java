@@ -1,4 +1,4 @@
-package com.infinispan.quickfixj.config;
+package io.github.darioajr.quickfixj.infinispan.config;
 
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -13,8 +13,8 @@ import org.infinispan.manager.EmbeddedCacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.infinispan.quickfixj.factory.InfinispanMessageStoreFactory;
-import com.infinispan.quickfixj.store.InfinispanSessionSettings;
+import io.github.darioajr.quickfixj.infinispan.factory.InfinispanMessageStoreFactory;
+import io.github.darioajr.quickfixj.infinispan.store.InfinispanSessionSettings;
 
 import quickfix.SessionSettings;
 
