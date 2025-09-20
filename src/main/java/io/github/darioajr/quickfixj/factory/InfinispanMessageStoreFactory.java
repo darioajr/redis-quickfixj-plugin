@@ -1,5 +1,6 @@
 package io.github.darioajr.quickfixj.factory;
 
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -292,7 +293,9 @@ public class InfinispanMessageStoreFactory implements MessageStoreFactory {
                 stats.setProperty("sessions.size", String.valueOf(sessionsCache.size()));
                 stats.setProperty("settings.size", String.valueOf(settingsCache.size()));
                 
-                stats.setProperty("cluster.members", String.valueOf(cacheManager.getMembers().size()));
+                // Handle cluster members safely for local mode
+                List<?> members = cacheManager.getMembers();
+                stats.setProperty("cluster.members", String.valueOf(members != null ? members.size() : 1));
                 stats.setProperty("cache.status", cacheManager.getStatus().toString());
                 
             } catch (Exception e) {

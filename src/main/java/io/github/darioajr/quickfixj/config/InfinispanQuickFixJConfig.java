@@ -223,11 +223,17 @@ public class InfinispanQuickFixJConfig {
      */
     public EmbeddedCacheManager createCacheManager() {
         try {
-            GlobalConfiguration globalConfig = new GlobalConfigurationBuilder()
-                .clusteredDefault()
-                .transport().clusterName(clusterName)
-                .build();
+            GlobalConfigurationBuilder globalConfigBuilder = new GlobalConfigurationBuilder();
             
+            // Only configure clustering if cache mode requires it and cluster name is set
+            if (cacheMode != CacheMode.LOCAL && clusterName != null && !clusterName.trim().isEmpty()) {
+                globalConfigBuilder.clusteredDefault()
+                    .transport().clusterName(clusterName);
+            } else {
+                globalConfigBuilder.nonClusteredDefault();
+            }
+            
+            GlobalConfiguration globalConfig = globalConfigBuilder.build();
             EmbeddedCacheManager cacheManager = new DefaultCacheManager(globalConfig);
             
             // Configure caches
@@ -308,6 +314,9 @@ public class InfinispanQuickFixJConfig {
         
         // Default configurations
         properties.setProperty("default.ConnectionType", "initiator");
+        properties.setProperty("default.BeginString", "FIX.4.4");
+        properties.setProperty("default.SenderCompID", "SENDER");
+        properties.setProperty("default.TargetCompID", "TARGET");
         properties.setProperty("default.StartTime", "00:00:00");
         properties.setProperty("default.EndTime", "00:00:00");
         properties.setProperty("default.HeartBtInt", "30");
