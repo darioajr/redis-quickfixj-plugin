@@ -1,4 +1,4 @@
-package io.github.darioajr.quickfixj.infinispan.examples;
+package io.github.darioajr.quickfixj.examples;
 
 import java.io.ByteArrayInputStream;
 import java.util.Properties;
@@ -7,8 +7,8 @@ import org.infinispan.configuration.cache.CacheMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.darioajr.quickfixj.infinispan.config.InfinispanQuickFixJConfig;
-import io.github.darioajr.quickfixj.infinispan.factory.InfinispanMessageStoreFactory;
+import io.github.darioajr.quickfixj.config.InfinispanQuickFixJConfig;
+import io.github.darioajr.quickfixj.factory.InfinispanMessageStoreFactory;
 import quickfix.MessageStore;
 import quickfix.SessionID;
 import quickfix.SessionSettings;

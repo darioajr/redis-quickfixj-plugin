@@ -1,4 +1,4 @@
-package io.github.darioajr.quickfixj.infinispan.factory;
+package io.github.darioajr.quickfixj.factory;
 
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,8 +15,8 @@ import org.infinispan.manager.EmbeddedCacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.darioajr.quickfixj.infinispan.store.InfinispanMessageStore;
-import io.github.darioajr.quickfixj.infinispan.store.InfinispanSessionSettings;
+import io.github.darioajr.quickfixj.store.InfinispanMessageStore;
+import io.github.darioajr.quickfixj.store.InfinispanSessionSettings;
 import quickfix.MessageStore;
 import quickfix.MessageStoreFactory;
 import quickfix.SessionID;
