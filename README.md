@@ -2,7 +2,9 @@
 
 This plugin enables using Infinispan as a persistence backend for QuickFIX/J sessions and messages, providing a distributed, scalable, and high-performance solution.
 
-[![codecov](https://codecov.io/github/darioajr/infinispan-quickfixj-plugin/branch/main/graph/badge.svg?style=flat-square)](https://app.codecov.io/github/darioajr/infinispan-quickfixj-plugin) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fdarioajr%2Finfinispan-quickfixj-plugin.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fdarioajr%2Finfinispan-quickfixj-plugin?ref=badge_shield) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=darioajr_infinispan-quickfixj-plugin&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=darioajr_infinispan-quickfixj-plugin) [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.darioajr/quickfixj-infinispan)](https://central.sonatype.com/artifact/io.github.darioajr/quickfixj-infinispan)
+[![codecov](https://codecov.io/github/darioajr/infinispan-quickfixj-plugin/branch/main/graph/badge.svg?style=flat-square)](https://app.codecov.io/github/darioajr/infinispan-quickfixj-plugin) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=darioajr_infinispan-quickfixj-plugin&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=darioajr_infinispan-quickfixj-plugin) [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.darioajr/quickfixj-infinispan)](https://central.sonatype.com/artifact/io.github.darioajr/quickfixj-infinispan)
+
+[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B50664%2Fgit%40github.com%3Adarioajr%2Finfinispan-quickfixj-plugin.git.svg?type=large&issueType=license)](https://app.fossa.com/projects/custom%2B50664%2Fgit%40github.com%3Adarioajr%2Finfinispan-quickfixj-plugin.git?ref=badge_large&issueType=license)
 
 
 ## Features
