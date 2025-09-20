@@ -274,6 +274,20 @@
                 </configuration>
             </plugin>
 
+            <!-- JAR -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/examples/**</exclude>
+                        <exclude>**/test/**</exclude>
+                        <exclude>**/integration/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
             <!-- SUREFIRE -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -286,6 +300,13 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>${maven.source.plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/examples/**</exclude>
+                        <exclude>**/test/**</exclude>
+                        <exclude>**/integration/**</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
