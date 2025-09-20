@@ -63,14 +63,28 @@ import quickfix.SessionSettings;
  */
 public class InfinispanQuickFixJConfig {
     
+    /** Logger instance for this class. */
     private static final Logger logger = LoggerFactory.getLogger(InfinispanQuickFixJConfig.class);
     
+    /** Name of the Infinispan cluster. */
     private String clusterName = "quickfixj-cluster";
+    
+    /** Cache mode for Infinispan (LOCAL, REPL_SYNC, DIST_SYNC, etc.). */
     private CacheMode cacheMode = CacheMode.LOCAL;
+    
+    /** Cache entry expiration time in minutes. */
     private long expirationMinutes = 1440; // 24 hours
+    
+    /** Maximum number of entries allowed in cache. */
     private int maxEntries = 10000;
+    
+    /** Whether to enable cache statistics. */
     private boolean enableStatistics = true;
+    
+    /** Whether to enable persistent storage. */
     private boolean enablePersistence = false;
+    
+    /** Directory location for persistent storage. */
     private String persistenceLocation = "./infinispan-data";
     
     /**

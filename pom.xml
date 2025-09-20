@@ -244,7 +244,8 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${maven.javadoc.plugin.version}</version>
                 <configuration>
-                    <excludePackageNames>io.github.darioajr.quickfixj.examples</excludePackageNames>
+                    <excludePackageNames>io.github.darioajr.quickfixj.examples:io.github.darioajr.quickfixj.integration:io.github.darioajr.quickfixj.store*test*</excludePackageNames>
+                    <sourcepath>${project.basedir}/src/main/java</sourcepath>
                 </configuration>
                 <executions>
                     <execution>
