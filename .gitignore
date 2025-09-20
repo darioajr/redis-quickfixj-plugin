@@ -60,7 +60,6 @@ out/
 .vscode/
 
 # QuickFIX/J files
-store/
 logs/
 *.session
 *.seqnums
