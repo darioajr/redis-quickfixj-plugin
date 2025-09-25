@@ -1,26 +1,26 @@
-# Infinispan Plugin for QuickFIX/J
+# Redis Plugin for QuickFIX/J
 
-This plugin enables using Infinispan as a persistence backend for QuickFIX/J sessions and messages, providing a distributed, scalable, and high-performance solution.
+This plugin enables using Redis as a persistence backend for QuickFIX/J sessions and messages, providing a distributed, scalable, and high-performance solution.
 
-[![codecov](https://codecov.io/github/darioajr/infinispan-quickfixj-plugin/branch/main/graph/badge.svg?style=flat-square)](https://app.codecov.io/github/darioajr/infinispan-quickfixj-plugin) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=darioajr_infinispan-quickfixj-plugin&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=darioajr_infinispan-quickfixj-plugin) [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.darioajr/quickfixj-infinispan)](https://central.sonatype.com/artifact/io.github.darioajr/quickfixj-infinispan)
+[![codecov](https://codecov.io/github/darioajr/redis-quickfixj-plugin/branch/main/graph/badge.svg?style=flat-square)](https://app.codecov.io/github/darioajr/redis-quickfixj-plugin) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=darioajr_redis-quickfixj-plugin&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=darioajr_redis-quickfixj-plugin) [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.darioajr/quickfixj-redis)](https://central.sonatype.com/artifact/io.github.darioajr/quickfixj-redis)
 
-[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B50664%2Fgit%40github.com%3Adarioajr%2Finfinispan-quickfixj-plugin.git.svg?type=large&issueType=license)](https://app.fossa.com/projects/custom%2B50664%2Fgit%40github.com%3Adarioajr%2Finfinispan-quickfixj-plugin.git?ref=badge_large&issueType=license)
+[![FOSSA Status](https://app.fossa.com/api/projects/custom%2B50664%2Fgit%40github.com%3Adarioajr%2Fredis-quickfixj-plugin.git.svg?type=large&issueType=license)](https://app.fossa.com/projects/custom%2B50664%2Fgit%40github.com%3Adarioajr%2Fredis-quickfixj-plugin.git?ref=badge_large&issueType=license)
 
 
 ## Features
 
-- **Distributed Persistence**: Stores messages and session data in distributed Infinispan cache
-- **High Availability**: Clustering and data replication support
-- **Flexible Configuration**: Multiple cache modes (LOCAL, REPLICATED, DISTRIBUTED)
+- **Distributed Persistence**: Stores messages and session data in Redis with high performance
+- **High Availability**: Redis clustering and replication support
+- **Flexible Configuration**: Support for authentication, SSL, and multiple databases
 - **Transparent Integration**: Drop-in replacement for standard QuickFIX/J stores
-- **Statistics and Monitoring**: Detailed performance metrics
-- **Disk Persistence**: Optional for durability beyond memory
+- **Statistics and Monitoring**: Detailed performance metrics via Redis commands
+- **Persistent Storage**: Redis persistence options (RDB, AOF) for durability
 
 ## Requirements
 
 - Java 21 or higher
 - QuickFIX/J 2.3.0+
-- Infinispan 15.1+
+- Redis 6.0+
 
 ## Installation
 
@@ -29,7 +29,7 @@ This plugin enables using Infinispan as a persistence backend for QuickFIX/J ses
 ```xml
 <dependency>
     <groupId>io.github.darioajr</groupId>
-    <artifactId>quickfixj-infinispan</artifactId>
+    <artifactId>quickfixj-redis</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```
@@ -37,7 +37,7 @@ This plugin enables using Infinispan as a persistence backend for QuickFIX/J ses
 ### Gradle
 
 ```gradle
-implementation 'io.github.darioajr:quickfixj-infinispan:1.0.0'
+implementation 'io.github.darioajr:quickfixj-redis:1.0.0'
 ```
 
 ## Quick Configuration
@@ -45,18 +45,18 @@ implementation 'io.github.darioajr:quickfixj-infinispan:1.0.0'
 ### 1. Basic Configuration (Local)
 
 ```java
-import io.github.darioajr.quickfixj.config.InfinispanQuickFixJConfig;
-import io.github.darioajr.quickfixj.factory.InfinispanMessageStoreFactory;
+import io.github.darioajr.quickfixj.config.RedisQuickFixJConfig;
+import io.github.darioajr.quickfixj.factory.RedisMessageStoreFactory;
 
 // Create configuration
-InfinispanQuickFixJConfig config = new InfinispanQuickFixJConfig()
-    .clusterName("my-cluster")
-    .cacheMode(CacheMode.LOCAL)
-    .expiration(1440) // 24 hours
-    .maxEntries(10000);
+RedisQuickFixJConfig config = new RedisQuickFixJConfig()
+    .host("localhost")
+    .port(6379)
+    .database(0)
+    .timeout(5000);
 
 // Create factory
-InfinispanMessageStoreFactory factory = config.createMessageStoreFactory();
+RedisMessageStoreFactory factory = config.createMessageStoreFactory();
 ```
 
 ### 2. Configuration via Properties
@@ -65,11 +65,11 @@ InfinispanMessageStoreFactory factory = config.createMessageStoreFactory();
 # quickfixj.cfg
 [DEFAULT]
 ConnectionType=initiator
-MessageStoreFactory=io.github.darioajr.quickfixj.factory.InfinispanMessageStoreFactory
-InfinispanClusterName=my-cluster
-InfinispanCacheMode=LOCAL
-InfinispanExpirationMinutes=1440
-InfinispanMaxEntries=10000
+MessageStoreFactory=io.github.darioajr.quickfixj.factory.RedisMessageStoreFactory
+redis.host=localhost
+redis.port=6379
+redis.database=0
+redis.timeout=5000
 
 [SESSION]
 BeginString=FIX.4.4
@@ -85,9 +85,8 @@ SocketConnectPort=9876
 // Create SessionSettings
 SessionSettings settings = new SessionSettings("quickfixj.cfg");
 
-// Create factory and configure
-InfinispanMessageStoreFactory factory = new InfinispanMessageStoreFactory();
-factory.configure(settings);
+// Create factory
+RedisMessageStoreFactory factory = new RedisMessageStoreFactory();
 
 // Use with SocketInitiator or SocketAcceptor
 SocketInitiator initiator = new SocketInitiator(application, factory, settings);
@@ -95,59 +94,72 @@ SocketInitiator initiator = new SocketInitiator(application, factory, settings);
 
 ## Advanced Configurations
 
-### Clustering and Distribution
+### Redis with Authentication and SSL
 
 ```java
-InfinispanQuickFixJConfig config = new InfinispanQuickFixJConfig()
-    .clusterName("quickfixj-production")
-    .cacheMode(CacheMode.DIST_SYNC) // Synchronous distributed
-    .expiration(2880) // 48 hours
-    .maxEntries(100000)
-    .enableStatistics(true)
-    .enablePersistence("/data/infinispan"); // Disk persistence
+RedisQuickFixJConfig config = new RedisQuickFixJConfig()
+    .host("redis.example.com")
+    .port(6380)
+    .password("mypassword")
+    .database(1)
+    .timeout(10000)
+    .enableSSL(true);
+
+RedisMessageStoreFactory factory = config.createMessageStoreFactory();
 ```
 
-### Custom Cache Configuration
+### Redis Cluster Configuration
+
+```properties
+# For Redis cluster, configure multiple nodes
+redis.host=redis-node1.example.com,redis-node2.example.com,redis-node3.example.com
+redis.port=6379
+redis.timeout=5000
+redis.password=clusterpassword
+```
+
+### Session Settings with Redis Backend
 
 ```java
-// For more advanced configurations, use XML file
-InfinispanMessageStoreFactory factory = new InfinispanMessageStoreFactory();
+// Create Redis-backed session settings
+RedisQuickFixJConfig config = new RedisQuickFixJConfig()
+    .host("localhost")
+    .port(6379);
 
-Properties props = new Properties();
-props.setProperty("InfinispanConfigFile", "infinispan-custom.xml");
+RedisSessionSettings sessionSettings = config.createSessionSettings();
 
-SessionSettings settings = new SessionSettings();
-settings.set("InfinispanConfigFile", "infinispan-custom.xml");
+// Set default configurations
+sessionSettings.setString("ConnectionType", "initiator");
+sessionSettings.setString("HeartBtInt", "30");
 
-factory.configure(settings);
+// Set session-specific configurations
+SessionID sessionID = new SessionID("FIX.4.4", "SENDER", "TARGET");
+sessionSettings.setString(sessionID, "SocketConnectHost", "broker.example.com");
 ```
 
 ## Configuration Properties
 
 | Property | Description | Default | Values |
 |----------|-------------|---------|---------|
-| `InfinispanClusterName` | Cluster name | `quickfixj-cluster` | String |
-| `InfinispanCacheMode` | Cache mode | `LOCAL` | `LOCAL`, `REPLICATED`, `DIST_SYNC`, `DIST_ASYNC` |
-| `InfinispanExpirationMinutes` | Expiration time (minutes) | `1440` | Number |
-| `InfinispanMaxEntries` | Maximum entries | `10000` | Number |
-| `InfinispanConfigFile` | XML configuration file | - | File path |
+| `redis.host` | Redis server hostname | `localhost` | String |
+| `redis.port` | Redis server port | `6379` | Number (1-65535) |
+| `redis.password` | Authentication password | - | String |
+| `redis.database` | Database number | `0` | Number (0-15) |
+| `redis.timeout` | Connection timeout (ms) | `2000` | Number |
+| `redis.ssl` | Enable SSL connection | `false` | Boolean |
 
-## Cache Modes
+## Redis Storage Structure
 
-### LOCAL
-- Cache only on local instance
-- Ideal for development and testing
-- No network overhead
+### Key Namespaces
+- `quickfixj:messages:{sessionId}` - FIX message storage
+- `quickfixj:sequences:{sessionId}` - Sequence number tracking  
+- `quickfixj:sessions:{sessionId}` - Session metadata
+- `quickfixj:settings:{sessionId}` - Session-specific settings
 
-### REPLICATED
-- Data replicated on all nodes
-- Fast reads, slower writes
-- Ideal for small clusters
-
-### DISTRIBUTED
-- Data distributed across nodes
-- Load balancing
-- Ideal for large clusters
+### Data Types
+- **Hash**: Used for storing messages, sequences, and settings
+- **String**: Used for session timestamps and metadata
+- **Expiration**: Optional TTL for automatic cleanup
 
 ## Practical Examples
 
@@ -157,12 +169,12 @@ factory.configure(settings);
 public class SimpleInitiator {
     public static void main(String[] args) throws Exception {
         // Configuration
-        InfinispanQuickFixJConfig config = new InfinispanQuickFixJConfig()
-            .clusterName("simple-cluster")
-            .cacheMode(CacheMode.LOCAL);
+        RedisQuickFixJConfig config = new RedisQuickFixJConfig()
+            .host("localhost")
+            .port(6379);
         
         // Factory
-        InfinispanMessageStoreFactory factory = config.createMessageStoreFactory();
+        RedisMessageStoreFactory factory = config.createMessageStoreFactory();
         
         // Settings
         SessionSettings settings = new SessionSettings("quickfixj.cfg");
@@ -189,16 +201,15 @@ public class SimpleInitiator {
 ```java
 public class DistributedAcceptor {
     public static void main(String[] args) throws Exception {
-        // Distributed configuration
-        InfinispanQuickFixJConfig config = new InfinispanQuickFixJConfig()
-            .clusterName("production-cluster")
-            .cacheMode(CacheMode.DIST_SYNC)
-            .expiration(2880) // 48 hours
-            .maxEntries(1000000)
-            .enableStatistics(true)
-            .enablePersistence("/opt/quickfixj/data");
+        // Redis configuration for production
+        RedisQuickFixJConfig config = new RedisQuickFixJConfig()
+            .host("redis-cluster.example.com")
+            .port(6379)
+            .password("your-redis-password")
+            .database(0)
+            .timeout(5000);
         
-        InfinispanMessageStoreFactory factory = config.createMessageStoreFactory();
+        RedisMessageStoreFactory factory = config.createMessageStoreFactory();
         
         SessionSettings settings = new SessionSettings("acceptor.cfg");
         factory.configure(settings);
@@ -232,10 +243,11 @@ System.out.println("Cluster members: " + stats.getProperty("cluster.members"));
 ### Performance Settings
 
 ```java
-InfinispanQuickFixJConfig config = new InfinispanQuickFixJConfig()
-    .maxEntries(1000000) // Increase for high load
-    .expiration(0) // No expiration for maximum performance
-    .enableStatistics(false); // Disable in production if not needed
+RedisQuickFixJConfig config = new RedisQuickFixJConfig()
+    .host("redis-server.example.com")
+    .port(6379)
+    .timeout(2000) // Lower timeout for better responsiveness
+    .database(1); // Use different database for isolation
 ```
 
 ### Heap and GC
@@ -256,17 +268,22 @@ InfinispanQuickFixJConfig config = new InfinispanQuickFixJConfig()
 ```xml
 <!-- logback.xml -->
 <logger name="io.github.darioajr.quickfixj" level="INFO"/>
-<logger name="org.infinispan" level="WARN"/>
+<logger name="redis.clients.jedis" level="WARN"/>
 ```
 
-### JMX
+### Redis Monitoring
 
-Infinispan exposes metrics via JMX. To enable:
+Redis provides built-in monitoring commands. Common commands:
 
-```java
-GlobalConfiguration globalConfig = new GlobalConfigurationBuilder()
-    .globalJmxStatistics().enable()
-    .build();
+```bash
+# Monitor real-time commands
+redis-cli MONITOR
+
+# Get server info
+redis-cli INFO
+
+# Memory usage
+redis-cli MEMORY USAGE key-name
 ```
 
 ### Connectivity Check
@@ -275,7 +292,7 @@ GlobalConfiguration globalConfig = new GlobalConfigurationBuilder()
 // Check cluster status
 EmbeddedCacheManager cacheManager = factory.getCacheManager();
 System.out.println("Members: " + cacheManager.getMembers());
-System.out.println("Status: " + cacheManager.getStatus());
+System.out.println("Redis connection: " + jedis.ping());
 ```
 
 ## Migration
@@ -283,7 +300,7 @@ System.out.println("Status: " + cacheManager.getStatus());
 ### From FileMessageStore
 
 1. Backup existing files
-2. Change configuration to use `InfinispanMessageStoreFactory`
+2. Change configuration to use `RedisMessageStoreFactory`
 3. Restart application
 4. Old data is not migrated automatically
 
@@ -312,15 +329,15 @@ This project is licensed under the Apache License 2.0. See the LICENSE file for 
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/darioajr/infinispan-quickfixj-plugin/issues)
-- **Documentation**: [Wiki](https://github.com/darioajr/infinispan-quickfixj-plugin/wiki)
-- **Community**: [Discussions](https://github.com/darioajr/infinispan-quickfixj-plugin/discussions)
+- **Issues**: [GitHub Issues](https://github.com/darioajr/redis-quickfixj-plugin/issues)
+- **Documentation**: [Wiki](https://github.com/darioajr/redis-quickfixj-plugin/wiki)
+- **Community**: [Discussions](https://github.com/darioajr/redis-quickfixj-plugin/discussions)
 
 ## Changelog
 
 ### 1.0.0
 - First stable version
-- MessageStore support via Infinispan
+- MessageStore support via Redis
 - Configuration via Properties and programmatic
 - Clustering support
 - Optional disk persistence

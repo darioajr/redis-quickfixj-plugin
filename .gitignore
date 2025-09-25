@@ -67,11 +67,6 @@ logs/
 *.body
 *.trailer
 
-# Infinispan data
-data/
-index/
-infinispan-data/
-
 # OS
 .DS_Store
 .DS_Store?

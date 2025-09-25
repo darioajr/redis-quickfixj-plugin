@@ -1,4 +1,4 @@
-# Contributing to the Infinispan Plugin for QuickFIX/J
+# Contributing to the Redis Plugin for QuickFIX/J
 
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
@@ -6,14 +6,14 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 
 We are always thrilled to receive pull requests, and do our best to process them as fast as possible. Not sure if that typo is worth a pull request? Do it! We will appreciate it.
 
-To contribute code or documentation, please submit a [pull request](https://github.com/darioajr/infinispan-quickfixj-plugin/pulls).
+To contribute code or documentation, please submit a [pull request](https://github.com/darioajr/redis-quickfixj-plugin/pulls).
 
 A good way to familiarize yourself with the codebase and contribution process is
-to look for and tackle low-hanging fruit in the [issue tracker](https://github.com/darioajr/infinispan-quickfixj-plugin/issues).
+to look for and tackle low-hanging fruit in the [issue tracker](https://github.com/darioajr/redis-quickfixj-plugin/issues).
 
 ## Create issues...
 
-If you would like to implement a new feature, please [raise an issue](https://github.com/darioajr/infinispan-quickfixj-plugin/issues)
+If you would like to implement a new feature, please [raise an issue](https://github.com/darioajr/redis-quickfixj-plugin/issues)
 before sending a pull request so the feature can be discussed before you start working on it.
 
 > Note: We appreciate your effort, and want to avoid a situation where a contribution
